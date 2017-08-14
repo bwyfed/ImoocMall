@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ES6 Demo演示 </title>
+    <style>
+      .log {
+        background-color: black;
+        color: white;
+        padding: 10px 20px;
+      }
+    </style>
+</head>
+<body>
+  <h2>ES6Demo演示</h2>
+  <div id="log" class="log"></div>
+  <script>
+    var str = `
+    console.log("a="+a);
+    var a = 1;
+    console.log("b="+b);
+    let b = 2;
+
+    function user() {
+        var a = 1;
+    }
+    console.log(a);
+    var a = 2;
+
+     //块级作用域
+    {
+        let a = 1;
+        var b = 2;
+    }
+    console.log("b:"+b);
+    console.log("a:"+a);   //error
+
+    let a = 1;
+    a = 2;
+    //    const b = 2;
+//    b = 3;  //错误
+    const b = {a:1};  //b所指向的地址不变
+    b.a = 2;
+    b.c = 10;
+    b = {c:1};  //error
+    console.log(b);
+    `;
+    printLog(str);
+/*
+    //模板字符串
+    let userName = 'Jack Tom';
+    printLog(`I'm ${userName}`);
+
+    //函数默认参数
+    function add(flag) {
+        if(flag) {
+            return "true";
+        } else {
+            return "error";
+        }
+    }
+    console.log(add());
+//    function sum(flag=true) {
+//      if(flag) {
+//        return "true";
+//      } else {
+//        return "error";
+//      }
+//    }
+    function sum(num1,num2=3) {
+      return num1+num2;
+    }
+    console.log(sum(7));
+
+    //箭头函数
+    var arr = [3,6,9];
+    var newArr = arr.map(function(item){
+        return item+2;
+    });
+    var newArr1 = arr.map((item)=>item+2);
+    console.log(newArr1);
+*/
+    //数组的解构
+    var [a,b,c] = [3,8];
+    //字符串的解构
+    var [x,y,z] = "Vue";
+    console.log(`x:${x},y:${y},z:${z}`);
+    //对象解构，对key进行拆分
+    var {n,m} = {m:10,n:20};
+    console.log(`m:${m},n:${n}`);
+    //函数的解构
+    function sum([x,y]) {
+        return x+y;
+    }
+    console.log(sum([3,7]));
+
+    function printLog(str) {
+        document.getElementById("log").innerText += str;
+    }
+  </script>
+</body>
+</html>
