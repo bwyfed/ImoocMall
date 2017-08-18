@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Vue-Resource使用示例</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script src="node_modules/vue/dist/vue.js"></script>
-    <script src="node_modules/vue-resource/dist/vue-resource.js"></script>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/vue-resource/dist/vue-resource.js"></script>
 </head>
 <body>
   <div id="app">
@@ -13,6 +13,7 @@
     <a href="javascript:void(0)" class="btn btn-primary" v-on:click="get">Get请求</a>
     <a href="javascript:void(0)" class="btn btn-primary" v-on:click="post">Post请求</a>
     <a href="javascript:void(0)" class="btn btn-primary" v-on:click="jsonp">JSONP请求</a>
+    <a href="javascript:void(0)" class="btn btn-primary" v-on:click="http">HTTP请求</a>
     <div>
       <span>{{msg}}</span>
     </div>
@@ -22,6 +23,19 @@
       el: "#app",
       data: {
           msg: ''
+      },
+      mounted: function() {
+          Vue.http.interceptors.push(function(request,next) {
+              //全局拦截器，全局处理
+              console.log("request init");
+              next(function(response){
+                  console.log("response init");
+                  return response;
+              })
+          })
+      },
+      http: {
+         root: "http://localhost:63342/ImoocMall"
       },
       methods: {
           get: function() {
@@ -54,7 +68,24 @@
                 .then(function(res){
                     this.msg = res.data;
                 })
-          }
+          },
+        http: function() {
+              this.$http({
+                url: "package.json",
+                params: {
+                    userId:"103"
+                },
+                headers: {
+                    token: "123"
+                },
+                timeout: 5,
+                before: function(){
+                    console.log("before init");
+                }
+              }).then(function(res) {
+                  this.msg = res.data;
+              })
+        }
       }
     })
   </script>
