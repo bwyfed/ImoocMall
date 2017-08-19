@@ -18,6 +18,7 @@
       increment() {
           //this.num++;
           this.$emit('incre');
+          import('../util');  //模块的异步加载
       },
       decrement() {
           //this.num--;
