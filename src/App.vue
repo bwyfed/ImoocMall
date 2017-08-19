@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <counter :num="num_p" @incre="num_p++" @decre="num_p--"></counter>
     <router-view class="main"></router-view>
     <router-view class="left" name="title"></router-view>
     <router-view class="right" name="image"></router-view>
@@ -8,8 +9,17 @@
 </template>
 
 <script>
+  import Counter from './components/Counter';
 export default {
-    name: 'app'
+    name: 'app',
+    components: {
+        Counter
+    },
+    data() {
+        return {
+            "num_p": 10
+        }
+    }
 }
 </script>
 

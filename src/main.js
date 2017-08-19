@@ -3,14 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import {router} from './router'
-import {sum,minus} from './util';
-import * as util from './util';
+// import {sum,minus} from './util';
+// import * as util from './util';
 
-console.log(`sum:${sum(1,6)}`);
-console.log(`minus:${minus(10,2)}`);
+// console.log(`sum:${sum(1,6)}`);
+// console.log(`minus:${minus(10,2)}`);
 
-console.log(`util.sum:${util.sum(1,6)}`);
-console.log(`util.minus:${util.minus(10,2)}`);
+// console.log(`util.sum:${util.sum(1,6)}`);
+// console.log(`util.minus:${util.minus(10,2)}`);
 
 Vue.config.productionTip = false
 
