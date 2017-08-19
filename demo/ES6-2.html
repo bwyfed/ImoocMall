@@ -13,7 +13,7 @@
     let total = 0;
     if(x) total+=x;
     if(y) total+=y;
-    if(z) total+=z
+    if(z) total+=z;
     console.log(`total=${total}`);
   }
   sum(5,"",9);
@@ -26,6 +26,7 @@
     console.log(`total=${total}`);
   }
   sum2(4,8,9,10);
+  //箭头函数的rest参数
   let sum3 = (...m) => {
     let total = 0;
     for(var i of m) {
@@ -37,7 +38,7 @@
 
   //对数组进行拆解，也就是对数组进行扩展
   var [x,y] = [4,8];
-  console.log(...[4,8]);
+  console.log(...[4,8]);  //...和数组一起，进行运算，扩展数组
 
   let arr1 = [1,3]; let arr2 = [4,8];
   console.log("concat:"+arr1.concat(arr2));
