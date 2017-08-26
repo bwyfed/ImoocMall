@@ -37,13 +37,13 @@
           <div class="accessory-list-wrap">
             <div class="accessory-list col-4">
               <ul>
-                <li>
+                <li v-for="item in goodsList">
                   <div class="pic">
-                    <a href="#"><img src="/static/1.jpg" alt=""></a>
+                    <a href="#"><img v-bind:src="'/static/'+item.productImg" alt=""></a>
                   </div>
                   <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">999</div>
+                    <div class="name">{{item.productName}}</div>
+                    <div class="price">{{item.productPrice}}</div>
                     <div class="btn-area">
                       <a href="javascript:;" class="btn btn--m">加入购物车</a>
                     </div>
@@ -100,10 +100,11 @@
   import NavHeader from '@/components/NavHeader.vue'
   import NavFooter from '@/components/NavFooter.vue'
   import NavBread from '@/components/NavBread.vue'
+  import axios from 'axios'
   export default {
       data() {
           return {
-              msg: 'hello vue'
+              goodsList: []
           }
       },
       components: {
@@ -111,10 +112,16 @@
         NavFooter,
         NavBread
       },
+      mounted: function() {
+          this.getGoodsList();
+      },
       methods: {
-          jump() {
-              //this.$router.push({path:'/cart?goodsId=123'});
-              this.$router.go(-2);
+          getGoodsList() {
+              axios.get("/goods").then((result)=>{
+                  var res = result.data;
+                  console.log(res);
+                  this.goodsList = res.result;
+              })
           }
       }
   }
