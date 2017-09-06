@@ -1,0 +1,15 @@
+JS Jquery 是对原生JS的封装，解决的是DOM操作
+Node express 是对原生Node的封装，解决的是路由
+
+express：
+1、颜值完胜（代码层次感强）
+2、路由能力强
+3、静态能力非常强
+4、中间件
+5、模板引擎
+
+express:jquery
+
+express适合入门选手，koa像刚毕业的学生，高不成低不就
+
+Node + express
