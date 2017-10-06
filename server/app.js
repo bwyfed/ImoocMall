@@ -14,6 +14,15 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// var ejs = require('ejs');
+//设置html文件
+// app.set('views', path.join(__dirname, 'ejsviews'));
+// app.engine('.html',ejs.__express);
+// app.set('view engine','html');
+//设置ejs视图引擎
+// app.set('views', path.join(__dirname, 'ejsviews'));
+// app.set('view engine','ejs');
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
