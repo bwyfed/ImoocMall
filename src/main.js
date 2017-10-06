@@ -4,11 +4,16 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueLazyLoad from 'vue-lazyload'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 Vue.config.productionTip = false
 
 Vue.use(VueLazyLoad,{
   loading: "/static/loading-svg/loading-balls.svg"
 });
+Vue.use(BootstrapVue);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
