@@ -27,13 +27,11 @@
 </template>
 
 <script>
-  import {bAlert, bBtn, bCollapse} from 'bootstrap-vue/lib/components'
+  import {bAlert, bBtn, bCollapse,bNav,bNavItem,bContainer,bRow,bCol} from 'bootstrap-vue/lib/components'
 export default {
     name: 'app',
   components: {
-        bAlert,
-    bBtn,
-    bCollapse
+        bAlert, bBtn, bCollapse, bNav, bNavItem, bContainer, bRow, bCol
   }
 }
 </script>

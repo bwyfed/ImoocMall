@@ -22,11 +22,13 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 var router = express.Router();
+/*
 var goodsData = require('../mock/goods.json');
 router.get("/goods", function(req, res, next){
   res.json(goodsData);
 });
 app.use(router);
+*/
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
