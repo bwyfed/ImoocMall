@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!--
     <div>
     <b-nav>
       <b-nav-item active>Active</b-nav-item>
@@ -20,6 +21,7 @@
 
 
     <b-alert show>Default Alert</b-alert>
+    -->
     <router-view class="main"></router-view>
     <router-view class="left" name="title"></router-view>
     <router-view class="right" name="image"></router-view>
@@ -27,12 +29,14 @@
 </template>
 
 <script>
-  import {bAlert, bBtn, bCollapse,bNav,bNavItem,bContainer,bRow,bCol} from 'bootstrap-vue/lib/components'
+//  import {bAlert, bBtn, bCollapse,bNav,bNavItem,bContainer,bRow,bCol} from 'bootstrap-vue/lib/components'
 export default {
-    name: 'app',
+    name: 'app'
+  /*
   components: {
         bAlert, bBtn, bCollapse, bNav, bNavItem, bContainer, bRow, bCol
   }
+  */
 }
 </script>
 

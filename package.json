@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
-    "bootstrap": "^3.3.7",
-    "bootstrap-vue": "^1.0.0-beta.7",
     "lodash.startcase": "^4.4.0",
     "vue": "^2.3.3",
     "vue-lazyload": "^1.0.6",
