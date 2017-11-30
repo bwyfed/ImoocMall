@@ -9,7 +9,7 @@
         <div class="filter-nav">
           <span class="sortby">Sort by:</span>
           <a href="javascript:void(0)" class="default cur">Default</a>
-          <a href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+          <a href="javascript:void(0)" class="price" @click="sortGoods">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
           <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
         </div>
         <div class="accessory-result">
@@ -34,43 +34,7 @@
                   </div>
                   <div class="main">
                     <div class="name">{{item.productName}}</div>
-                    <div class="price">{{item.productPrice}}</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="/static/2.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">1000</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="/static/3.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">500</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="/static/4.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">2499</div>
+                    <div class="price">{{item.salePrice}}</div>
                     <div class="btn-area">
                       <a href="javascript:;" class="btn btn--m">加入购物车</a>
                     </div>
@@ -97,6 +61,9 @@
       data() {
           return {
             goodsList: [],
+            sortFlag: true,
+            page: 1,
+            pageSize: 8,
             priceFilter: [
               {
                   startPrice: '0.00',
@@ -125,17 +92,30 @@
           this.getGoodsList();
       },
       methods: {
-          getGoodsList() {
-              axios.get("/goods").then((result)=>{
-                  let res = result.data;
-                  console.log(res);
-                  if(res.status==0) {
-                    this.goodsList = res.result.list;
-                  } else {
-                      this.goodsList = [];
-                  }
-              })
-          },
+        getGoodsList() {
+          var param = {
+            page: this.page,
+            pageSize: this.pageSize,
+            sort: this.sortFlag?1:-1
+          };
+          axios.get("/goods",{
+              params: param
+          }).then((result)=>{
+            let res = result.data;
+            console.log(res);
+            if(res.status==0) {
+              this.goodsList = res.result.list;
+            } else {
+              this.goodsList = [];
+            }
+          })
+        },
+        sortGoods() { //排序
+          this.sortFlag = !this.sortFlag;
+          //点击排序后从第1页开始，重新获取列表
+          this.page = 1;
+          this.getGoodsList();
+        },
         showFilterPop() {
               this.filterBy = true;
               this.overLayFlag = true;
