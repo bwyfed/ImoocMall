@@ -41,6 +41,9 @@
                   </div>
                 </li>
               </ul>
+              <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+                加载中...
+              </div>
             </div>
           </div>
         </div>
@@ -64,6 +67,7 @@
             sortFlag: true,
             page: 1,
             pageSize: 8,
+            busy: true,
             priceFilter: [
               {
                   startPrice: '0.00',
@@ -92,7 +96,7 @@
           this.getGoodsList();
       },
       methods: {
-        getGoodsList() {
+        getGoodsList(flag) {
           var param = {
             page: this.page,
             pageSize: this.pageSize,
@@ -104,7 +108,19 @@
             let res = result.data;
             console.log(res);
             if(res.status==0) {
-              this.goodsList = res.result.list;
+                if(flag) {
+                    //需要累加
+                  this.goodsList = this.goodsList.concat(res.result.list);
+                  if(res.result.count == 0) {
+                      this.busy = true;
+                  } else {
+                      this.busy = false;
+                  }
+                } else {
+                    //第一次进入或者不需要分页
+                  this.goodsList = res.result.list;
+                  this.busy = false; //起用滚动
+                }
             } else {
               this.goodsList = [];
             }
@@ -115,6 +131,13 @@
           //点击排序后从第1页开始，重新获取列表
           this.page = 1;
           this.getGoodsList();
+        },
+        loadMore() {
+            this.busy = true;
+            setTimeout(() => {
+              this.page++;
+              this.getGoodsList(true);
+            }, 500);
         },
         showFilterPop() {
               this.filterBy = true;
