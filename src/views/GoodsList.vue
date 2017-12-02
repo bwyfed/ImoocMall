@@ -41,8 +41,8 @@
                   </div>
                 </li>
               </ul>
-              <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
-                加载中...
+              <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+                <img v-if="loading" src="../assets/loading-spinning-bubbles.svg"/>
               </div>
             </div>
           </div>
@@ -68,6 +68,7 @@
             page: 1,
             pageSize: 8,
             busy: true,
+            loading: false,
             priceFilter: [
               {
                   startPrice: '0.00',
@@ -79,7 +80,7 @@
               },
               {
                 startPrice: '1000.00',
-                endPrice: '1500.00'
+                endPrice: '5000.00'
               }
             ],
             priceChecked: 'all',
@@ -100,13 +101,16 @@
           var param = {
             page: this.page,
             pageSize: this.pageSize,
-            sort: this.sortFlag?1:-1
+            sort: this.sortFlag?1:-1,
+            priceLevel: this.priceChecked
           };
+          this.loading = true;
           axios.get("/goods",{
               params: param
           }).then((result)=>{
             let res = result.data;
             console.log(res);
+            this.loading = false;
             if(res.status==0) {
                 if(flag) {
                     //需要累加
@@ -132,6 +136,11 @@
           this.page = 1;
           this.getGoodsList();
         },
+        setPriceFilter(index) {
+            this.priceChecked = index;
+            this.page = 1;
+            this.getGoodsList();
+        },
         loadMore() {
             this.busy = true;
             setTimeout(() => {
@@ -146,10 +155,6 @@
         closePop() {
           this.filterBy = false;
           this.overLayFlag = false;
-        },
-        setPriceFilter(index) {
-              this.priceChecked = index;
-              this.closePop();
         }
       }
   }
