@@ -23,10 +23,10 @@ mongoose.connection.on("disconnected", function(){
 //查询商品列表信息
 router.get("/",function(req,res,next){
   let params = {};
-  let page = parseInt(req.param("page"));//获取当前页面号码
-  let pageSize = parseInt(req.param("pageSize")); //每页的条目数
-  let priceLevel = req.param('priceLevel');
-  let sort = req.param("sort"); //排序是升序还是降序
+  let page = parseInt(req.query["page"]||1);//获取当前页面号码，默认为1
+  let pageSize = parseInt(req.query["pageSize"]||0); //每页的条目数，默认为0时，limit(0)会返回所有
+  let priceLevel = req.query['priceLevel']||'all';
+  let sort = req.query["sort"]||1; //排序是升序还是降序，默认是升序
   let skip = (page-1)*pageSize; //跳过的条数
   let priceGt = '',priceLte = ''; //价格的最大区间和最小区间
   if(priceLevel!=='all') {
