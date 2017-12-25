@@ -8,6 +8,8 @@ var productSchema = new Schema({
   "productId": String,
   "productName": String,
   "salePrice": Number,
+  "productNum": Number,
+  "checked": Number,
   "productImage": String
 });
 //定义了Good模型后，会自动在单词后加上s，查找goods这个表。

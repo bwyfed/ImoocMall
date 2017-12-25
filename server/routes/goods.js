@@ -87,5 +87,51 @@ router.get("/",function(req,res,next){
   });
   */
 });
+//加入商品到购物车
+router.post("/addCart",function(req,res,next){
+  var userId = '100000077',productId = req.body.productId;
+  var User = require('../models/user');
 
+  User.findOne({userId: userId},function(err,userDoc) {
+    if(err) {
+      res.json({
+        status: 1,
+        msg: err.message
+      })
+    } else {
+      console.log(userDoc);
+      if(userDoc) {
+        //查询商品是否已存在
+        Goods.findOne({productId: productId},function(err,doc) {
+          if(err) {
+            res.json({
+              status: 1,
+              msg: err.message
+            })
+          } else {
+            if(doc) {
+              doc.productNum = 1;
+              doc.checked = 1;
+              userDoc.cartList.push(doc);  //将文档加入到购物车里面去
+              userDoc.save(function(err,doc){
+                if(err) {
+                  res.json({
+                    status: 1,
+                    msg: err.message
+                  })
+                } else {
+                  res.json({
+                    status: 0,
+                    msg: '',
+                    result: 'success'
+                  })
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  });
+});
 module.exports = router;
