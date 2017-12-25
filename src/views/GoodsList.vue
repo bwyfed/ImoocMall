@@ -11,7 +11,7 @@
         <a @click="sortGoods" href="javascript:void(0);">
           Price
           <svg class="icon-arrow-short">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href=""></use>
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow"></use>
           </svg>
         </a>
       </div>
