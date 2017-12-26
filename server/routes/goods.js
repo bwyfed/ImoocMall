@@ -102,36 +102,63 @@ router.post("/addCart",function(req,res,next){
     } else {//已经获取到用户的信息
       console.log("userDoc:"+userDoc);
       if(userDoc) {
-        //在商品列表中查询该商品是否存在
-        Goods.findOne({productId: productId},function(err1,doc1) {
-          if(err1) {
-            res.json({
-              status: 1,
-              msg: err.message
-            })
-          } else {
-            if(doc1) { //获得了该条商品的信息
-              doc1.productNum = 1;
-              doc1.checked = 1;
-              //将商品信息(文档)加入到用户信息(购物车)里面去
-              userDoc.cartList.push(doc1);
-              userDoc.save(function(err2,doc2){
-                if(err2) {
-                  res.json({
-                    status: 1,
-                    msg: err.message
-                  })
-                } else {
-                  res.json({
-                    status: 0,
-                    msg: '',
-                    result: 'save success'
-                  })
-                }
+        let goodsItem;
+        //遍历所有的用户信息
+        userDoc.cartList.forEach(function(item){
+          if(item.productId == productId) {
+            goodsItem = item;
+            item.productNum ++;
+          }
+        });
+        if(goodsItem) {
+          //购物车已经有了，再保存一次即可
+          userDoc.save(function(err2,doc2){
+            if(err2) {
+              res.json({
+                status: 1,
+                msg: err.message
+              })
+            } else {
+              res.json({
+                status: 0,
+                msg: '',
+                result: 'save success'
               })
             }
-          }
-        })
+          })
+        } else {
+          //购物车中没有此商品，那么添加商品到购物车中
+          //在商品列表中查询该商品是否存在
+          Goods.findOne({productId: productId},function(err1,doc1) {
+            if(err1) {
+              res.json({
+                status: 1,
+                msg: err.message
+              })
+            } else {
+              if(doc1) { //获得了该条商品的信息
+                doc1.productNum = 1;
+                doc1.checked = 1;
+                //将商品信息(文档)加入到用户信息(购物车)里面去
+                userDoc.cartList.push(doc1);
+                userDoc.save(function(err2,doc2){
+                  if(err2) {
+                    res.json({
+                      status: 1,
+                      msg: err.message
+                    })
+                  } else {
+                    res.json({
+                      status: 0,
+                      msg: '',
+                      result: 'save success'
+                    })
+                  }
+                })
+              }
+            }
+          })
+        }
       }
       else {
         res.json({
