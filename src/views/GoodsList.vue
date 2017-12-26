@@ -10,8 +10,8 @@
         <span class="def">Default</span>
         <a @click="sortGoods" href="javascript:void(0);">
           Price
-          <svg class="icon-arrow-short">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow"></use>
+          <svg class="icon icon-arrow-short">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow-short"></use>
           </svg>
         </a>
       </div>
@@ -20,27 +20,27 @@
           <div class="price-filter">
             <dl>
               <dt>Price:</dt>
-              <dd>
-                <a href="javascript: void(0);" class="cur">All</a>
-              </dd>
-              <dd>
-                <a href="javascript: void(0);">0.00 - 100.00</a>
-              </dd>
-              <dd>
-                <a href="javascript: void(0);">100.00 - 500.00</a>
-              </dd>
-              <dd>
-                <a href="javascript: void(0);">500.00 - 1000.00</a>
-              </dd>
-              <dd>
-                <a href="javascript: void(0);">1000.00 - 2000.00</a>
-              </dd>
               <!--<dd>-->
-                <!--<a href="javascript:void(0);" v-bind:class="{'cur':priceChecked}"></a>-->
+                <!--<a href="javascript: void(0);" class="cur">All</a>-->
               <!--</dd>-->
-              <!--<dd v-for="(item, index) in priceFilter">-->
-                <!--<a href="javascript:void(0);" v-bind:class="{'cur':priceChecked}"></a>-->
+              <!--<dd>-->
+                <!--<a href="javascript: void(0);">0.00 - 100.00</a>-->
               <!--</dd>-->
+              <!--<dd>-->
+                <!--<a href="javascript: void(0);">100.00 - 500.00</a>-->
+              <!--</dd>-->
+              <!--<dd>-->
+                <!--<a href="javascript: void(0);">500.00 - 1000.00</a>-->
+              <!--</dd>-->
+              <!--<dd>-->
+                <!--<a href="javascript: void(0);">1000.00 - 2000.00</a>-->
+              <!--</dd>-->
+              <dd>
+                <a href="javascript:void(0)" @click="setPriceFilter('all')" v-bind:class="{cur: priceChecked=='all'}">All</a>
+              </dd>
+              <dd v-for="(price,index) in priceFilter">
+                <a href="javascript:void(0)" @click="setPriceFilter(index)" v-bind:class="{cur:priceChecked==index}">{{price.startPrice}} - {{price.endPrice}}</a>
+              </dd>
             </dl>
           </div>
         </div>
@@ -62,8 +62,7 @@
             </li>
           </ul>
           <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
-            <!--<img v-if="loading" src="../assets/loading-spinning-bubbles.svg"/>-->
-            加载中...
+            <img v-if="loading" src="../assets/loading-spinning-bubbles.svg"/>
           </div>
         </div>
       </div>
@@ -256,7 +255,11 @@
             priceFilter: [
               {
                   startPrice: '0.00',
-                  endPrice: '500'
+                  endPrice: '100'
+              },
+              {
+                startPrice: '100.00',
+                endPrice: '500.00'
               },
               {
                 startPrice: '500.00',
@@ -264,7 +267,7 @@
               },
               {
                 startPrice: '1000.00',
-                endPrice: '5000.00'
+                endPrice: '2000.00'
               }
             ],
             priceChecked: 'all',
@@ -288,13 +291,13 @@
             sort: this.sortFlag?1:-1,
             priceLevel: this.priceChecked
           };
-          this.loading = true;
+          this.loading = true;//接口请求之前时展示loading效果
           axios.get("/goods",{
               params: param
           }).then((response)=>{
             let res = response.data;
             console.log(res);
-            this.loading = false;
+            this.loading = false; //返回数据后隐藏loading效果
             if(res.status==0) {
                 if(flag) {
                     //需要累加
@@ -323,7 +326,7 @@
         },
         setPriceFilter(index) {
             this.priceChecked = index;
-            this.page = 1;
+            this.page = 1; //过滤从第一页开始
             this.getGoodsList();
         },
         loadMore() {

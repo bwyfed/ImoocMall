@@ -25,7 +25,7 @@ router.get("/",function(req,res,next){
   let params = {};
   let page = parseInt(req.query["page"]||1);//获取当前页面号码，默认为1
   let pageSize = parseInt(req.query["pageSize"]||0); //每页的条目数，默认为0时，limit(0)会返回所有
-  let priceLevel = req.query['priceLevel']||'all';
+  let priceLevel = req.query['priceLevel']||'all';  //价格过滤参数，字符串'0','1','2','3'或者'all'，默认是'all'
   let sort = req.query["sort"]||1; //排序是升序还是降序，默认是升序
   let skip = (page-1)*pageSize; //跳过的条数
   let priceGt = '',priceLte = ''; //价格的最大区间和最小区间
@@ -42,7 +42,7 @@ router.get("/",function(req,res,next){
         $gt: priceGt,
         $lte: priceLte
       }
-    }
+    };
   }
   //分页功能:查找所有的数据，跳过skip条数据，并限制每页是pageSize条数据
   let goodsModel = Goods.find(params).skip(skip).limit(pageSize);
