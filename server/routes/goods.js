@@ -87,10 +87,11 @@ router.get("/",function(req,res,next){
   });
   */
 });
-//加入商品到购物车
+//加入商品到某个用户的购物车
 router.post("/addCart",function(req,res,next){
+  //这里假设用户已经登录了
   var userId = '100000077',productId = req.body.productId;
-  var User = require('../models/user');
+  var User = require('../models/user'); //获取模型，执行API
 
   User.findOne({userId: userId},function(err,userDoc) {
     if(err) {
@@ -98,23 +99,24 @@ router.post("/addCart",function(req,res,next){
         status: 1,
         msg: err.message
       })
-    } else {
-      console.log(userDoc);
+    } else {//已经获取到用户的信息
+      console.log("userDoc:"+userDoc);
       if(userDoc) {
-        //查询商品是否已存在
-        Goods.findOne({productId: productId},function(err,doc) {
-          if(err) {
+        //在商品列表中查询该商品是否存在
+        Goods.findOne({productId: productId},function(err1,doc1) {
+          if(err1) {
             res.json({
               status: 1,
               msg: err.message
             })
           } else {
-            if(doc) {
-              doc.productNum = 1;
-              doc.checked = 1;
-              userDoc.cartList.push(doc);  //将文档加入到购物车里面去
-              userDoc.save(function(err,doc){
-                if(err) {
+            if(doc1) { //获得了该条商品的信息
+              doc1.productNum = 1;
+              doc1.checked = 1;
+              //将商品信息(文档)加入到用户信息(购物车)里面去
+              userDoc.cartList.push(doc1);
+              userDoc.save(function(err2,doc2){
+                if(err2) {
                   res.json({
                     status: 1,
                     msg: err.message
@@ -123,12 +125,18 @@ router.post("/addCart",function(req,res,next){
                   res.json({
                     status: 0,
                     msg: '',
-                    result: 'success'
+                    result: 'save success'
                   })
                 }
               })
             }
           }
+        })
+      }
+      else {
+        res.json({
+          status: 1,
+          msg: '用户信息不存在'
         })
       }
     }

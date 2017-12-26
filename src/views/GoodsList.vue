@@ -341,12 +341,13 @@
             axios.post("/goods/addCart",{
                 productId: productId
             }).then((res)=>{
-                if(res.status===0) {
+                var result = res.data;
+                if(result.status===0) {
                     alert("加入成功");
                 } else {
-                    alert("msg:"+res.msg);
+                    alert("msg:"+result.msg);
                 }
-            })
+            });
         },
         showFilterPop() {
               this.filterBy = true;
