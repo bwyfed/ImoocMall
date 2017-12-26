@@ -17,6 +17,7 @@ Vue.use(VueLazyLoad,{
 Vue.use(infiniteScroll);
 // Vue.use(BootstrapVue);
 /* eslint-disable no-new */
+import './assets/css/base.css'
 new Vue({
   el: '#app',
   router,
