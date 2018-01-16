@@ -30,6 +30,19 @@
               <ul>
                 <li v-for="item in goodsList">
                   <div class="pic">
+                    <a href="#"><img v-bind:src="'/static/'+item.productImg" alt=""></a>
+                  </div>
+                  <div class="main">
+                    <div class="name">{{item.productName}}</div>
+                    <div class="price">{{item.productPrice}}</div>
+                    <div class="btn-area">
+                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                    </div>
+                  </div>
+                </li>
+                <!--
+                <li v-for="item in goodsList">
+                  <div class="pic">
                     <a href="#"><img v-lazy="'/static/'+item.productImage" alt=""></a>
                   </div>
                   <div class="main">
@@ -40,6 +53,7 @@
                     </div>
                   </div>
                 </li>
+                -->
               </ul>
               <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
                 <img v-if="loading" src="../assets/loading-spinning-bubbles.svg"/>
@@ -98,6 +112,11 @@
       },
       methods: {
         getGoodsList(flag) {
+            axios.get("/goods").then((result)=> {
+                var res = result.data;
+                this.goodsList = res.result;
+            });
+            /*
           var param = {
             page: this.page,
             pageSize: this.pageSize,
@@ -129,6 +148,7 @@
               this.goodsList = [];
             }
           })
+          */
         },
         sortGoods() { //排序
           this.sortFlag = !this.sortFlag;
