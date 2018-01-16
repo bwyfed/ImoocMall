@@ -13,7 +13,7 @@
           <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
         </div>
         <div class="accessory-result">
-          <!-- filter -->
+          <!-- filter 当视口小于一定值时，此区域会被隐藏掉 -->
           <div class="filter stopPop" id="filter" v-bind:class="{'filterby-show':filterBy}">
             <dl class="filter-price">
               <dt>Price:</dt>
@@ -86,7 +86,7 @@
             priceFilter: [
               {
                   startPrice: '0.00',
-                  endPrice: '500'
+                  endPrice: '500.00'
               },
               {
                 startPrice: '500.00',
@@ -94,12 +94,12 @@
               },
               {
                 startPrice: '1000.00',
-                endPrice: '5000.00'
+                endPrice: '2000.00'
               }
             ],
-            priceChecked: 'all',
-            filterBy: false,
-            overLayFlag: false
+            priceChecked: 'all',//当前选中的是哪一项价格
+            filterBy: false, //控制抽屉是否显示
+            overLayFlag: false  //控制遮罩是否显示
           }
       },
       components: {
@@ -158,8 +158,9 @@
         },
         setPriceFilter(index) {
             this.priceChecked = index;
-            this.page = 1;
-            this.getGoodsList();
+            this.closePop();  //选中价格后，关闭遮罩层
+//            this.page = 1;
+//            this.getGoodsList();
         },
         loadMore() {
             this.busy = true;
