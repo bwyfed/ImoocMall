@@ -8,9 +8,14 @@ let util = require('util');
 let fs = require('fs');
 
 let server = http.createServer((req,res)=>{
-  // res.statusCode = 200;
+  res.statusCode = 200;
 
-  // res.setHeader("Content-Type","text/plain; charset=utf-8");
+  res.setHeader("Content-Type","text/plain; charset=utf-8");
+  console.log("url:"+req.url); //demo.html?a=123
+  console.log("parse:"+url.parse(req.url)); //[object Object]
+  console.log("inspect:"+util.inspect(url.parse(req.url))); //字符串输出
+  res.end(util.inspect(url.parse(req.url)));
+  /*
   let pathname = url.parse(req.url).pathname;
   fs.readFile(pathname.substring(1),function(err,data) {
     if(err) {
@@ -25,7 +30,7 @@ let server = http.createServer((req,res)=>{
     }
     res.end();
   });
-
+*/
 });
 
 server.listen(3000,'127.0.0.1',()=>{
