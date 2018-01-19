@@ -11,11 +11,12 @@ let server = http.createServer((req,res)=>{
   res.statusCode = 200;
 
   res.setHeader("Content-Type","text/plain; charset=utf-8");
-  console.log("url:"+req.url); //demo.html?a=123
-  console.log("parse:"+url.parse(req.url)); //[object Object]
-  console.log("inspect:"+util.inspect(url.parse(req.url))); //字符串输出
-  res.end(util.inspect(url.parse(req.url)));
-  /*
+  // console.log("url:"+req.url); //demo.html?a=123
+  // console.log("parse:"+url.parse(req.url)); //[object Object]
+  // console.log("inspect:"+util.inspect(url.parse(req.url))); //字符串输出
+  // res.end(util.inspect(url.parse(req.url)));
+
+  //加载静态页面，创建容器
   let pathname = url.parse(req.url).pathname;
   fs.readFile(pathname.substring(1),function(err,data) {
     if(err) {
@@ -28,9 +29,8 @@ let server = http.createServer((req,res)=>{
       });
       res.write(data.toString());
     }
-    res.end();
+    res.end();  //响应结束
   });
-*/
 });
 
 server.listen(3000,'127.0.0.1',()=>{

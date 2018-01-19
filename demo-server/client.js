@@ -12,7 +12,7 @@ http.get('http://www.imooc.com/u/card',(res)=> {
     data += chunk;
   });
   res.on("end",function(){
-    let result = JSON.parse(data);
-    console.log("result:"+util.inspect(result));
-  })
-})
+    // let result = JSON.parse(data);
+    console.log("result:"+util.inspect(data));
+  });
+});
