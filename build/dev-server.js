@@ -21,6 +21,7 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+/*
 //以下代码设置路由，用于获取mock数据
 var router = express.Router();
 var goodsData = require('../mock/goods.json');
@@ -28,7 +29,7 @@ router.get("/goods", function(req, res, next){
   res.json(goodsData);
 });
 app.use(router);
-
+*/
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
