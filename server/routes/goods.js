@@ -4,7 +4,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var Goods = require('../models/goods');
+var Goods = require('../models/goods'); //加载模型
 
 //连接MongoDB数据库
 mongoose.connect('mongodb://127.0.0.1:27017/dumall');
@@ -22,6 +22,7 @@ mongoose.connection.on("disconnected", function(){
 });
 //查询商品列表信息
 router.get("/",function(req,res,next){
+  /*
   let params = {};
   let page = parseInt(req.param("page"));//获取当前页面号码
   let pageSize = parseInt(req.param("pageSize")); //每页的条目数
@@ -65,13 +66,14 @@ router.get("/",function(req,res,next){
       })
     }
   });
+  */
+
   // res.send("hello, goods list.");
-  //查询数据库
-  /*
+  //通过模型Goods查询数据库中的商品列表
   Goods.find({},function(err,doc) {
     if(err) {
-      res.json({
-        status: '1',
+      res.json({  //输出一个json对象
+        status: 1,
         msg: err.message
       })
     } else {
@@ -80,12 +82,11 @@ router.get("/",function(req,res,next){
         msg: '',
         result: {
           count: doc.length,
-          list: doc
+          list: doc //doc就是查出来的文档集合
         }
       })
     }
   });
-  */
 });
 
 module.exports = router;
