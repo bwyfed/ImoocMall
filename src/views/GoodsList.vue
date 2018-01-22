@@ -34,7 +34,8 @@
                   </div>
                   <div class="main">
                     <div class="name">{{item.productName}}</div>
-                    <div class="price">{{item.productPrice}}</div>
+                    <!--<div class="price">{{item.productPrice}}</div>-->
+                    <div class="price">{{item.salePrice}}</div>
                     <div class="btn-area">
                       <a href="javascript:;" class="btn btn--m">加入购物车</a>
                     </div>
@@ -78,9 +79,9 @@
       data() {
           return {
             goodsList: [],
-            sortFlag: true,
-            page: 1,
-            pageSize: 8,
+            sortFlag: true, //排序是升序true还是降序false
+            page: 1,  //当前页码
+            pageSize: 8,  //每页显示的条目数
             busy: true,
             loading: false,
             priceFilter: [
@@ -112,6 +113,7 @@
       },
       methods: {
         getGoodsList(flag) {
+            /*
             let _this = this;
             axios.get("/goods").then((result)=> {
                 var res = result.data;
@@ -121,7 +123,7 @@
                   _this.goodsList = [];
                 }
             });
-            /*
+            */
           var param = {
             page: this.page,
             pageSize: this.pageSize,
@@ -131,16 +133,15 @@
           this.loading = true;
           axios.get("/goods",{
               params: param
-          }).then((result)=>{
-            let res = result.data;
-            console.log(res);
+          }).then((response)=>{
+            let res = response.data;
             this.loading = false;
-            if(res.status==0) {
+            if(res.status===0) {
                 if(flag) {
-                    //需要累加
+                  //需要累加
                   this.goodsList = this.goodsList.concat(res.result.list);
-                  if(res.result.count == 0) {
-                      this.busy = true;
+                  if(res.result.count === 0) { //已经没有数据了
+                      this.busy = true; //禁用滚动加载
                   } else {
                       this.busy = false;
                   }
@@ -153,7 +154,6 @@
               this.goodsList = [];
             }
           })
-          */
         },
         sortGoods() { //排序
           this.sortFlag = !this.sortFlag;
