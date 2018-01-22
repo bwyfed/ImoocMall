@@ -70,6 +70,7 @@ router.get("/",function(req,res,next){
 
   // res.send("hello, goods list.");
   //通过模型Goods查询数据库中的商品列表
+  /*
   Goods.find({},function(err,doc) {
     if(err) {
       res.json({  //输出一个json对象
@@ -87,6 +88,33 @@ router.get("/",function(req,res,next){
       })
     }
   });
+  */
+  //排序功能和分页功能
+  let page = parseInt(req.param("page")); //从参数获取当前是第几页
+  let pageSize = parseInt(req.param("pageSize")); //每页的条目数
+  let sort = req.param("sort"); //从参数中获取排序参数是升序还是降序
+  let skip = (page-1)*pageSize; //跳过的条数
+  let params = {};    //查询条件
+  //分页功能:查找所有的数据，跳过skip条数据，并限制每页是pageSize条数据
+  let goodsModel = Goods.find(params).skip(skip).limit(pageSize);  //find返回一个模型
+  goodsModel.sort({'salePrice': sort});    //调用模型的sort方法，传入sort参数，对salePrice进行排序
+  goodsModel.exec({},function(err,doc){
+    if(err) {
+      res.json({  //输出一个json对象
+        status: 1,
+        msg: err.message
+      })
+    } else {
+      res.json({
+        status: 0,
+        msg: '',
+        result: {
+          count: doc.length,
+          list: doc //doc就是查出来的文档集合
+        }
+      })
+    }
+  })
 });
 
 module.exports = router;
