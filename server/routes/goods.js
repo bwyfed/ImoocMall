@@ -22,52 +22,6 @@ mongoose.connection.on("disconnected", function(){
 });
 //查询商品列表信息
 router.get("/",function(req,res,next){
-  /*
-  let params = {};
-  let page = parseInt(req.param("page"));//获取当前页面号码
-  let pageSize = parseInt(req.param("pageSize")); //每页的条目数
-  let priceLevel = req.param('priceLevel');
-  let sort = req.param("sort"); //排序是升序还是降序
-  let skip = (page-1)*pageSize; //跳过的条数
-  let priceGt = '',priceLte = ''; //价格的最大区间和最小区间
-  if(priceLevel!=='all') {
-    switch (priceLevel) {
-      case '0': priceGt = 0; priceLte = 100;break;
-      case '1': priceGt = 100; priceLte = 500;break;
-      case '2': priceGt = 500; priceLte = 1000;break;
-      case '3': priceGt = 1000; priceLte = 5000;break;
-    }
-    //条件查询
-    params = {
-      salePrice: {
-        $gt: priceGt,
-        $lte: priceLte
-      }
-    }
-  }
-  //分页功能:查找所有的数据，跳过skip条数据，并限制每页是pageSize条数据
-  let goodsModel = Goods.find(params).skip(skip).limit(pageSize);
-  //排序功能
-  goodsModel.sort({'salePrice':sort});
-  goodsModel.exec(function(err,doc){
-    if(err) {
-      res.json({
-        status: '1',
-        msg: err.message
-      })
-    } else {
-      res.json({
-        status: 0,
-        msg: '',
-        result: {
-          count: doc.length,
-          list: doc
-        }
-      })
-    }
-  });
-  */
-
   // res.send("hello, goods list.");
   //通过模型Goods查询数据库中的商品列表
   /*
@@ -89,6 +43,7 @@ router.get("/",function(req,res,next){
     }
   });
   */
+  /*
   //排序功能和分页功能
   let page = parseInt(req.param("page")); //从参数获取当前是第几页
   let pageSize = parseInt(req.param("pageSize")); //每页的条目数
@@ -115,6 +70,51 @@ router.get("/",function(req,res,next){
       })
     }
   })
+  */
+  //加入价格过滤功能
+  let page = parseInt(req.query["page"]);//获取当前页面号码
+  let pageSize = parseInt(req.query["pageSize"]); //每页的条目数
+  let priceLevel = req.query['priceLevel'];  //用于价格过滤
+  let sort = req.query["sort"]; //排序是升序还是降序
+  let skip = (page-1)*pageSize; //跳过的条数
+  let priceGt,priceLte; //价格的最大区间和最小区间
+  let params = {};
+  if(priceLevel!=='all') {
+    switch (priceLevel) {
+      case '0': priceGt = 0; priceLte = 100;break;
+      case '1': priceGt = 100; priceLte = 500;break;
+      case '2': priceGt = 500; priceLte = 1000;break;
+      case '3': priceGt = 1000; priceLte = 5000;break;
+    }
+    //条件查询
+    params = {
+      salePrice: {
+        $gt: priceGt,
+        $lte: priceLte
+      }
+    }
+  }
+  //分页功能:查找所有的数据，跳过skip条数据，并限制每页是pageSize条数据
+  let goodsModel = Goods.find(params).skip(skip).limit(pageSize);
+  //排序功能，对价格进行排序
+  goodsModel.sort({'salePrice':sort});
+  goodsModel.exec(function(err,doc){
+    if(err) {
+      res.json({
+        status: 1,
+        msg: err.message
+      })
+    } else {
+      res.json({
+        status: 0,
+        msg: '',
+        result: {
+          count: doc.length,
+          list: doc
+        }
+      })
+    }
+  });
 });
 
 module.exports = router;

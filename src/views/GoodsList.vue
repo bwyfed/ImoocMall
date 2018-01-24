@@ -83,11 +83,15 @@
             page: 1,  //当前页码
             pageSize: 8,  //每页显示的条目数
             busy: true,
-            loading: false,
+            loading: false, //是否显示加载效果
             priceFilter: [
               {
                   startPrice: '0.00',
-                  endPrice: '500.00'
+                  endPrice: '100.00'
+              },
+              {
+                startPrice: '100.00',
+                endPrice: '500.00'
               },
               {
                 startPrice: '500.00',
@@ -95,7 +99,7 @@
               },
               {
                 startPrice: '1000.00',
-                endPrice: '2000.00'
+                endPrice: '5000.00'
               }
             ],
             priceChecked: 'all',//当前选中的是哪一项价格
@@ -128,14 +132,14 @@
             page: this.page,
             pageSize: this.pageSize,
             sort: this.sortFlag?1:-1,
-            priceLevel: this.priceChecked
+            priceLevel: this.priceChecked //用于价格过滤
           };
-          this.loading = true;
+          this.loading = true; //加载效果展示
           axios.get("/goods",{
               params: param
           }).then((response)=>{
             let res = response.data;
-            this.loading = false;
+            this.loading = false; //隐藏加载效果
             if(res.status===0) {
                 if(flag) {
                   //需要累加
@@ -163,9 +167,9 @@
         },
         setPriceFilter(index) {
             this.priceChecked = index;
-            this.closePop();  //选中价格后，关闭遮罩层
-//            this.page = 1;
-//            this.getGoodsList();
+//            this.closePop();  //选中价格后，关闭遮罩层
+            this.page = 1;
+            this.getGoodsList();
         },
         loadMore() {
             this.busy = true;
