@@ -116,5 +116,55 @@ router.get("/",function(req,res,next){
     }
   });
 });
+//加入商品到购物车中
+router.post("/addCart",function(req,res,next) {
+  let userId = '100000077',    //假设用户已经登录了，获取了用户ID
+    productId = req.body["productId"];  //商品ID
+  let User = require('../models/user'); //获取用户的模型，通过模型执行其API
 
+  //首先拿到用户的信息，才能往里插入数据，这里只拿一个用户
+  User.findOne({userId:userId},function(err,userDoc){
+    if(err) {
+      res.json({
+        status: 1,
+        msg: err.message
+      })
+    } else {
+      console.log('userDoc');console.log(userDoc);
+      if(userDoc) {
+        //看商品中有无此商品，查询商品信息
+        Goods.findOne({productId: productId},function(err1, goodsDoc){
+          if(err1) {
+            res.json({
+              status: 1,
+              msg: err.message
+            });
+          } else {
+            if(goodsDoc) {
+              //增加商品数量和选择标志
+              goodsDoc.productNum = '1'; //商品数量
+              goodsDoc.checked = '1';
+              userDoc.cartList.push(goodsDoc); //将商品加入到用户的购物车中
+              userDoc.save(function(err2, userDoc2){
+                console.log('userDoc2');console.log(userDoc2);
+                if(err2) {
+                  res.json({
+                    status: 1,
+                    msg: err2.message
+                  });
+                } else {
+                  res.json({
+                    status: 0,
+                    msg: '',
+                    result: 'success'
+                  });
+                }
+              });
+            }
+          }
+        })
+      }
+    }
+  });
+});
 module.exports = router;
