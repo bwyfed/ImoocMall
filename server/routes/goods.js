@@ -132,37 +132,64 @@ router.post("/addCart",function(req,res,next) {
     } else {
       console.log('userDoc');console.log(userDoc);
       if(userDoc) {
-        //看商品中有无此商品，查询商品信息
-        Goods.findOne({productId: productId},function(err1, goodsDoc){
-          if(err1) {
-            res.json({
-              status: 1,
-              msg: err.message
-            });
-          } else {
-            if(goodsDoc) {
-              //增加商品数量和选择标志
-              goodsDoc.productNum = '1'; //商品数量
-              goodsDoc.checked = '1';
-              userDoc.cartList.push(goodsDoc); //将商品加入到用户的购物车中
-              userDoc.save(function(err2, userDoc2){
-                console.log('userDoc2');console.log(userDoc2);
-                if(err2) {
-                  res.json({
-                    status: 1,
-                    msg: err2.message
-                  });
-                } else {
-                  res.json({
-                    status: 0,
-                    msg: '',
-                    result: 'success'
-                  });
-                }
+        //查看当前用户的购物车列表中有无此商品，若有就对商品数目加1
+        let goodsItem = '';
+        userDoc.cartList.forEach(function(item){
+          if(item.productId === productId) {
+            goodsItem = item;
+            item.productNum++;
+          }
+        });
+        if(goodsItem) {
+          //购物车里已经有了，就直接保存到购物车中
+          userDoc.save(function(err2, userDoc2){
+            console.log('userDoc2');console.log(userDoc2);
+            if(err2) {
+              res.json({
+                status: 1,
+                msg: err2.message
+              });
+            } else {
+              res.json({
+                status: 0,
+                msg: '',
+                result: 'success'
               });
             }
-          }
-        })
+          });
+        } else {
+          //看商品中有无此商品，查询商品信息
+          Goods.findOne({productId: productId},function(err1, goodsDoc){
+            if(err1) {
+              res.json({
+                status: 1,
+                msg: err.message
+              });
+            } else {
+              if(goodsDoc) {
+                //增加商品数量和选择标志
+                goodsDoc.productNum = '1'; //商品数量
+                goodsDoc.checked = '1';
+                userDoc.cartList.push(goodsDoc); //将商品加入到用户的购物车中
+                userDoc.save(function(err2, userDoc2){
+                  console.log('userDoc2');console.log(userDoc2);
+                  if(err2) {
+                    res.json({
+                      status: 1,
+                      msg: err2.message
+                    });
+                  } else {
+                    res.json({
+                      status: 0,
+                      msg: '',
+                      result: 'success'
+                    });
+                  }
+                });
+              }
+            }
+          })
+        }
       }
     }
   });
