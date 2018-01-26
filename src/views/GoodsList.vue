@@ -13,7 +13,7 @@
           <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
         </div>
         <div class="accessory-result">
-          <!-- filter -->
+          <!-- filter 当视口小于一定值时，此区域会被隐藏掉 -->
           <div class="filter stopPop" id="filter" v-bind:class="{'filterby-show':filterBy}">
             <dl class="filter-price">
               <dt>Price:</dt>
@@ -34,12 +34,27 @@
                   </div>
                   <div class="main">
                     <div class="name">{{item.productName}}</div>
+                    <!--<div class="price">{{item.productPrice}}</div>-->
+                    <div class="price">{{item.salePrice}}</div>
+                    <div class="btn-area">
+                      <a href="javascript:;" class="btn btn--m" @click="addCart(item.productId)">加入购物车</a>
+                    </div>
+                  </div>
+                </li>
+                <!--
+                <li v-for="item in goodsList">
+                  <div class="pic">
+                    <a href="#"><img v-lazy="'/static/'+item.productImage" alt=""></a>
+                  </div>
+                  <div class="main">
+                    <div class="name">{{item.productName}}</div>
                     <div class="price">{{item.salePrice}}</div>
                     <div class="btn-area">
                       <a href="javascript:;" class="btn btn--m">加入购物车</a>
                     </div>
                   </div>
                 </li>
+                -->
               </ul>
               <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
                 <img v-if="loading" src="../assets/loading-spinning-bubbles.svg"/>
@@ -64,15 +79,19 @@
       data() {
           return {
             goodsList: [],
-            sortFlag: true,
-            page: 1,
-            pageSize: 8,
+            sortFlag: true, //排序是升序true还是降序false
+            page: 1,  //当前页码
+            pageSize: 8,  //每页显示的条目数
             busy: true,
-            loading: false,
+            loading: false, //是否显示加载效果
             priceFilter: [
               {
                   startPrice: '0.00',
-                  endPrice: '500'
+                  endPrice: '100.00'
+              },
+              {
+                startPrice: '100.00',
+                endPrice: '500.00'
               },
               {
                 startPrice: '500.00',
@@ -83,9 +102,9 @@
                 endPrice: '5000.00'
               }
             ],
-            priceChecked: 'all',
-            filterBy: false,
-            overLayFlag: false
+            priceChecked: 'all',//当前选中的是哪一项价格
+            filterBy: false, //控制抽屉是否显示
+            overLayFlag: false  //控制遮罩是否显示
           }
       },
       components: {
@@ -98,25 +117,35 @@
       },
       methods: {
         getGoodsList(flag) {
+            /*
+            let _this = this;
+            axios.get("/goods").then((result)=> {
+                var res = result.data;
+                if(res.status ===0) {
+                  _this.goodsList = res.result.list;
+                } else {
+                  _this.goodsList = [];
+                }
+            });
+            */
           var param = {
             page: this.page,
             pageSize: this.pageSize,
             sort: this.sortFlag?1:-1,
-            priceLevel: this.priceChecked
+            priceLevel: this.priceChecked //用于价格过滤
           };
-          this.loading = true;
+          this.loading = true; //加载效果展示
           axios.get("/goods",{
               params: param
-          }).then((result)=>{
-            let res = result.data;
-            console.log(res);
-            this.loading = false;
-            if(res.status==0) {
+          }).then((response)=>{
+            let res = response.data;
+            this.loading = false; //隐藏加载效果
+            if(res.status===0) {
                 if(flag) {
-                    //需要累加
+                  //需要累加
                   this.goodsList = this.goodsList.concat(res.result.list);
-                  if(res.result.count == 0) {
-                      this.busy = true;
+                  if(res.result.count === 0) { //已经没有数据了
+                      this.busy = true; //禁用滚动加载
                   } else {
                       this.busy = false;
                   }
@@ -138,6 +167,7 @@
         },
         setPriceFilter(index) {
             this.priceChecked = index;
+//            this.closePop();  //选中价格后，关闭遮罩层
             this.page = 1;
             this.getGoodsList();
         },
@@ -147,6 +177,17 @@
               this.page++;
               this.getGoodsList(true);
             }, 500);
+        },
+        addCart(productId) {
+            axios.post("/goods/addCart",{
+                productId: productId
+            }).then((res)=>{
+                if(res.data.status===0) {
+                    alert("加入成功");
+                } else {
+                    alert("msg:"+res.msg);
+                }
+            })
         },
         showFilterPop() {
               this.filterBy = true;

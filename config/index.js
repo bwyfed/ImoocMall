@@ -29,6 +29,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/goods': {
+          target: 'http://localhost:3000'
+      },
+      '/goods/addCart': {
         target: 'http://localhost:3000'
       }
     },

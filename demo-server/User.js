@@ -8,11 +8,11 @@ module.exports = {
   sayHello: function () {
     return 'Hello';
   }
-}
+};
 */
 
 //逐个暴露key
 exports.userName = "Tom";
 exports.sayHello = function() {
   return 'World';
-}
+};
