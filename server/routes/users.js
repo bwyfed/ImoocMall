@@ -21,6 +21,7 @@ router.post("/login", function(req, res, next) {
       });
     } else {
       if(doc) {
+        //登录成功，往cookie里写入userId
         res.cookie("userId",doc.userId,{
           path: '/',
           maxAge: 1000*60*60
@@ -39,4 +40,17 @@ router.post("/login", function(req, res, next) {
 
 });
 
+//登出接口
+router.post("/logout", function(req,res,next) {
+  //登出时，需要将cookie里的userId删除或者置为空
+  res.cookie("userId","",{
+    path: "/",
+    maxAge: -1
+  });
+  res.json({
+    status: 0,
+    msg: '',
+    result:null
+  });
+});
 module.exports = router;
