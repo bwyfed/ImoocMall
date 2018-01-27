@@ -328,7 +328,7 @@
           this.overLayFlag = false;
         },
         closeModal() {
-            this.mdShow = false;
+            this.mdShow = false; //关掉模态对话框
         }
       }
   }
