@@ -8,8 +8,13 @@
       <div class="container">
         <div class="filter-nav">
           <span class="sortby">Sort by:</span>
-          <a href="javascript:void(0)" class="default cur">Default</a>
-          <a href="javascript:void(0)" class="price" @click="sortGoods">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+          <span class="def">Default</span>
+          <a href="javascript:void(0)" class="price" @click="sortGoods">
+            Price
+            <svg class="icon-arrow-short sort-up">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow-short"></use>
+            </svg>
+          </a>
           <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
         </div>
         <div class="accessory-result">
@@ -68,6 +73,135 @@
     <nav-footer></nav-footer>
   </div>
 </template>
+<style>
+  .container {
+    padding: 0 10px;
+  }
+  .filter-nav {
+    height: 55px;
+    line-height: 55px;
+    background-color: white;
+    text-align: right;
+    padding-right: 20px;
+    margin: 60px 0 30px 0;
+  }
+  .def {
+    color: #ee7a23;
+  }
+  .filter-nav span {
+    margin-right: 10px;
+  }
+  .filter-nav a {
+    margin-left: 10px;
+  }
+  .icon-arrow-short {
+    width: 11px;
+    height: 11px;
+    transition: all .3s ease-out;
+  }
+  .goods-container {
+    display: flex;
+  }
+  .price-wrap {
+    padding: 0 20px;
+    margin-right: 50px;
+    width: 230px;
+  }
+  .price-filter dt {
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .price-filter dd {
+    height: 26px;
+    line-height: 26px;
+    margin-bottom: 20px;
+  }
+  .price-filter dd a {
+    transition: all .3s ease-out;
+  }
+  .cur {
+    border-left: 2px solid #ee7a2c;
+    color: #ee7a2c;
+    transition:all .3s ease-out;
+    padding-left: 15px;
+  }
+  .price-filter dd a:hover {
+    border-left: 2px solid #ee7a2c;
+    color: #ee7a2c;
+    transition: all .3s ease-out;
+    padding-left:15px;
+  }
+  .list-wrap {
+    flex: 1;
+  }
+  .list-wrap ul::after {
+    clear: both;
+    content: '';
+    height: 0;
+    display: block;
+    visibility: hidden;
+  }
+  .list-wrap .item {
+    width: 23.80952%;
+    float: left;
+    margin-right: 1.5%;
+    margin-bottom: 1.5%;
+    border: 2px solid #e9e9e9;
+    background-color: white;
+    transition:all .5s ease-out;
+  }
+  .list-wrap .item:hover {
+    transform: translateY(-10px);
+    transition: all .5s ease-out;
+    box-shadow:0 0 3px #e9e9e9;
+    border-color: #ee7a2c;
+  }
+  .list-wrap .item:nth-child(4n) {
+    margin-right: 0;
+  }
+  .list-wrap .info {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 0 10px;
+  }
+  .item img {
+    width: 100%;
+  }
+  .info .info-name {
+    height: 4em;
+    font-weight: bold;
+    font-size: 18px;
+    color: #d1434a;
+  }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    padding: 0 10px;
+    text-align:center;
+    color: #d1434a;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #d1434a;
+    margin-top: 10px;
+  }
+  .load-more {
+    height: 100px;
+    line-height: 100px;
+    text-align:center;
+  }
+  .sort-up {
+    transform: rotate(180deg);
+    transition: all .3s ease-out;
+  }
+  .btn:hover {
+    background-color: #ffe5e6;
+    transition: all .3s ease-out;
+  }
+</style>
 <script>
   import "../assets/css/base.css"
   import "../assets/css/product.css"
