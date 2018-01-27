@@ -32,6 +32,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next) {
+  if(req.cookies.userId) {
+    //如果登录了就继续往后流转
+    next();
+  } else {
+    console.log(`path:${req.path},originalUrl:${req.originalUrl}`);
+    //没有登录则判断原始URL
+    if(req.originalUrl === '/users/login' ||
+      req.originalUrl === '/users/logout' ||
+      req.path === '/goods/list' ) {
+      next(); //对登录和登出进行往后流转
+    } else {
+      res.json({
+        status: 10001,
+        msg: '当前未登录',
+        result: null
+      })
+    }
+  }
+});
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/goods', goods);

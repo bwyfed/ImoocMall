@@ -147,7 +147,18 @@
             nickName: ''  //存储登录返回的用户名
           }
       },
+    mounted() {
+      this.checkLogin();
+    },
     methods: {
+      checkLogin() {
+        axios.get('/users/checkLogin').then((response)=>{
+          let res = response.data;
+          if(res.status === 0) {
+            this.nickName = res.result;
+          }
+        });
+      },
       login() { //登录方法的实现
         if(!this.userName || !this.userPwd) {
             this.errorTip = true;

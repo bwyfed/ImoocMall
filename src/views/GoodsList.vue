@@ -135,7 +135,7 @@
             priceLevel: this.priceChecked //用于价格过滤
           };
           this.loading = true; //加载效果展示
-          axios.get("/goods",{
+          axios.get("/goods/list",{
               params: param
           }).then((response)=>{
             let res = response.data;
@@ -181,8 +181,9 @@
         addCart(productId) {
             axios.post("/goods/addCart",{
                 productId: productId
-            }).then((res)=>{
-                if(res.data.status===0) {
+            }).then((response)=>{
+                let res = response.data;
+                if(res.status===0) {
                     alert("加入成功");
                 } else {
                     alert("msg:"+res.msg);
