@@ -74,4 +74,26 @@ router.get("/checkLogin", function(req, res, next){
   }
 });
 
+//查询当前用户的购物车列表数据
+router.get("/cartList", function(req, res, next) {
+  let userId = req.cookies.userId;  //获取用户ID
+  User.findOne({userId: userId}, function(err, doc){
+    if(err) {
+      res.json({
+        status: 1,
+        msg: err.message,
+        result: null
+      })
+    } else {
+      if(doc) {
+        res.json({
+          status: 0,
+          msg: '',
+          result: doc.cartList
+        });
+      }
+    }
+  });
+});
+
 module.exports = router;
