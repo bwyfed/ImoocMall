@@ -10,7 +10,7 @@ var productSchema = new Schema({
   "salePrice": Number,
   "productImage": String,
   "checked": String,
-  "productNum": String
+  "productNum": Number
 });
 //通过商品模式定义了商品模型Good（名字），会自动在单词后加上s，查找goods这个表。
 module.exports = mongoose.model('Good',productSchema);

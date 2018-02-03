@@ -168,7 +168,7 @@ router.post("/addCart",function(req,res,next) {
             } else {
               if(goodsDoc) {
                 //增加商品数量和选择标志
-                goodsDoc.productNum = '1'; //商品数量
+                goodsDoc.productNum = 1; //商品数量
                 goodsDoc.checked = '1';
                 userDoc.cartList.push(goodsDoc); //将商品加入到用户的购物车中
                 userDoc.save(function(err2, userDoc2){

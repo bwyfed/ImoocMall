@@ -6,7 +6,7 @@ import Cart from '@/views/Cart'
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash', //或者 history。不同的前端路由模式
   routes: [
     {
       path: '/',
