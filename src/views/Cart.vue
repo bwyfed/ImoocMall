@@ -62,7 +62,7 @@
               <li v-for="item in cartList">
                 <div class="cart-tab-1">
                   <div class="cart-item-check">
-                    <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked==='1'}" @click="editCart('checked',item)">
+                    <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked=='1'}" @click="editCart('checked',item)">
                       <svg class="icon icon-ok">
                         <use xlink:href="#icon-ok"></use>
                       </svg>
@@ -109,8 +109,8 @@
           <div class="cart-foot-inner">
             <div class="cart-foot-l">
               <div class="item-all-check">
-                <a href="javascipt:;">
-                  <span class="checkbox-btn item-check-btn">
+                <a href="javascipt:;" @click="toggleCheckAll">
+                  <span class="checkbox-btn item-check-btn" v-bind:class="{'check': checkAllFlag}">
                       <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                   </span>
                   <span>Select all</span>
@@ -176,10 +176,24 @@
         cartList:[],
         productId: '',
         modalConfirm: false
+//        checkAllFlag: false
       }
     },
     mounted() {
       this.init();
+    },
+    computed: {
+      checkAllFlag() {
+          //如果商品选中数量等于总数量，则表示全部选中
+          return this.checkedCount === this.cartList.length;
+      },
+      checkedCount() {  //购物车列表中选中的数量
+          var i = 0;
+          this.cartList.forEach((item)=>{
+              if(item.checked=='1') i++;
+          });
+          return i;
+      }
     },
     components:{
       NavHeader,
@@ -229,6 +243,21 @@
             checked:item.checked
           }).then((response)=>{
               let res = response.data;
+          })
+      },
+      toggleCheckAll() {
+//          this.checkAllFlag = !this.checkAllFlag; //计算属性不能再被直接赋值
+          var flag = !this.checkAllFlag;
+          this.cartList.forEach((item)=>{
+              item.checked = flag?'1':'0';
+          });
+          axios.post("/users/editCheckAll",{
+              checkAll: flag
+          }).then((response)=>{
+              let res = response.data;
+              if(res.status===0) {
+                  console.log("update success");
+              }
           })
       }
     }
