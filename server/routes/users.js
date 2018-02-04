@@ -204,4 +204,54 @@ router.get("/addressList",function(req, res, next){
     }
   });
 });
+//设置默认地址接口
+router.post("/setDefault",function(req,res,next) {
+  var userId = req.cookies.userId,
+    addressId = req.body.addressId;
+  if(!addressId) {
+    res.json({
+      status: 1003,
+      msg: 'addressId is null',
+      result: null
+    })
+  } else {
+    User.findOne({userId: userId}, function(err, doc) {
+      if(err) {
+        res.json({
+          status: 1,
+          msg: err.message,
+          result: null
+        });
+      } else {
+        var addressList = doc.addressList;
+        addressList.forEach((item)=>{
+          //默认地址只有一个，因此这里设置互斥的情形
+          if(item.addressId === addressId) {
+            item.isDefault = true;
+          } else {
+            item.isDefault = false;
+          }
+        });
+        //然后保存修改后的文档
+        doc.save(function(err1,doc1){
+          if(err1) {
+            res.json({
+              status: 1,
+              msg: err1.message,
+              result: null
+            });
+          } else {
+            res.json({
+              status: 0,
+              msg: '',
+              result: null
+            });
+          }
+        });
+      }
+    })
+  }
+
+});
+
 module.exports = router;

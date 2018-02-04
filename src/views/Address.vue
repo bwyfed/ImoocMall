@@ -72,9 +72,9 @@
                     </a>
                   </div>
                   <div class="addr-opration addr-set-default">
-                    <a href="javascript:;" class="addr-set-default-btn"><i>Set default</i></a>
+                    <a href="javascript:;" class="addr-set-default-btn" v-if="!item.isDefault" @click="setDefault(item.addressId)"><i>Set default</i></a>
                   </div>
-                  <div class="addr-opration addr-default">Default address</div>
+                  <div class="addr-opration addr-default" v-if="item.isDefault">Default address</div>
                 </li>
                 <li class="addr-new">
                   <div class="add-new-inner">
@@ -168,6 +168,16 @@
         } else {  //需要收起地址
             this.limit = 3;
         }
+      },
+      setDefault(addressId) {
+        axios.post("/users/setDefault",{addressId})
+          .then((response)=>{
+            let res = response.data;
+            if(res.status === 0) {
+                console.log("set default");
+                this.init();
+            }
+        })
       }
     }
   }
