@@ -60,14 +60,14 @@
           <div class="addr-list-wrap">
             <div class="addr-list">
               <ul>
-                <li v-for="(item, index) in addressListFilter" v-bind:class="{'check':checkIndex===index}" @click="checkIndex=index">
+                <li v-for="(item, index) in addressListFilter" v-bind:class="{'check':checkIndex===index}" @click="checkIndex=index;selectedAddressId = item.addressId">
                   <dl>
                     <dt>{{item.userName}}</dt>
                     <dd class="address">{{item.streetName}}</dd>
                     <dd class="tel">{{item.tel}}</dd>
                   </dl>
                   <div class="addr-opration addr-del">
-                    <a href="javascript:;" class="addr-del-btn">
+                    <a href="javascript:;" class="addr-del-btn" @click="delAddressConfirm(item.addressId)">
                       <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
                     </a>
                   </div>
@@ -119,11 +119,18 @@
             </div>
           </div>
           <div class="next-btn-wrap">
-            <a class="btn btn--m btn--red">Next</a>
+            <router-link class="btn btn--m btn--red" v-bind:to="{path:'/orderConfirm',query:{'addressId':selectedAddressId}}">Next</router-link>
           </div>
         </div>
       </div>
     </div>
+    <modal :mdShow="isMdShow" @close="closeModal">
+      <p slot="message">您是否确认要删除地址？</p>
+      <div slot="btnGroup">
+        <a class="btn btn--m" href="javascript:;" @click="delAddress">确认</a>
+        <a class="btn btn--m" href="javascript:;" @click="isMdShow=false">取消</a>
+      </div>
+    </modal>
     <nav-footer></nav-footer>
   </div>
 </template>
@@ -138,7 +145,10 @@
         return {
           limit: 3,
           checkIndex: 0,
-          addressList: []
+          selectedAddressId: '',//选中地址的ID
+          addressList: [],
+          isMdShow: false,
+          addressId: '' //要删除的地址ID
         }
     },
     mounted() {
@@ -178,6 +188,25 @@
                 this.init();
             }
         })
+      },
+      closeModal() {
+        this.isMdShow = false;
+      },
+      delAddressConfirm(addressId) {
+        this.isMdShow = true;
+        this.addressId = addressId;
+      },
+      delAddress() {
+        axios.post("/users/delAddress",{
+          addressId: this.addressId
+        }).then((response)=>{
+          let res = response.data;
+          if(res.status===0) {
+            console.log("del success");
+            this.isMdShow = false;
+            this.init();
+          }
+        });
       }
     }
   }
