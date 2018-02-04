@@ -118,7 +118,7 @@ router.get("/list",function(req,res,next){
 });
 //加入商品到购物车中
 router.post("/addCart",function(req,res,next) {
-  let userId = '100000077',    //假设用户已经登录了，获取了用户ID
+  let userId = req.cookies.userId,    //假设用户已经登录了，获取了用户ID
     productId = req.body["productId"];  //商品ID
   let User = require('../models/user'); //获取用户的模型，通过模型执行其API
 
@@ -190,6 +190,12 @@ router.post("/addCart",function(req,res,next) {
             }
           })
         }
+      } else {
+        res.json({
+          status: 2,
+          msg: 'user not exists',
+          result: null
+        });
       }
     }
   });
