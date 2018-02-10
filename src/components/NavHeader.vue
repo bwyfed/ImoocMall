@@ -157,9 +157,14 @@
             userPwd: '',
             errorTip: false,
             loginModalFlag: false, //控制遮罩层关闭与否
-            nickName: ''  //存储登录返回的用户名
+//            nickName: ''  //存储登录返回的用户名
           }
       },
+    computed: {
+      nickName() {
+        return this.$store.state.nickName;
+      }
+    },
     mounted() {
       this.checkLogin();
     },
@@ -168,7 +173,8 @@
         axios.get('/users/checkLogin').then((response)=>{
           let res = response.data;
           if(res.status === 0) {
-            this.nickName = res.result;
+//            this.nickName = res.result;
+            this.$store.commit("updateUserInfo",res.result.userName);
           }
         });
       },
@@ -185,7 +191,8 @@
             if(res.status===0){
               this.errorTip = false;
               this.loginModalFlag = false;
-              this.nickName = res.result.userName
+//              this.nickName = res.result.userName
+              this.getCartCount();
               //to-do.
             } else {
               this.errorTip = true;
@@ -196,9 +203,16 @@
         axios.post("/users/logout").then((response)=>{
           let res = response.data;
           if(res.status===0) {
-            this.nickName = '';
+//            this.nickName = '';
+            this.$store.commit("updateUserInfo",'');
           }
         })
+      },
+      getCartCount() {
+          axios.get("/getCartCount").then((response)=>{
+              let res = response.data;
+              this.$store.commit("updateCartCount",res.result);
+          })
       }
     }
   }
