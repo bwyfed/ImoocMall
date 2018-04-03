@@ -17,14 +17,14 @@ router.post("/login", function(req, res, next) {
     if(err) {
       res.json({
         status: 1,
-        msg: "账号密码不对"
+        msg: err.message
       });
     } else {
       if(doc) {
         //登录成功，往cookie里写入userId
         res.cookie("userId",doc.userId,{
           path: '/',
-          maxAge: 1000*60*60
+          maxAge: 1000*20
         });
         res.cookie("userName",doc.userName,{
           path: '/',
@@ -38,6 +38,11 @@ router.post("/login", function(req, res, next) {
             userName: doc.userName
           }
         })
+      } else {
+        res.json({
+          status: 2,
+          msg: '用户名或者密码错误'
+        });
       }
     }
   });
